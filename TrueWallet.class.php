@@ -175,8 +175,8 @@ class TrueWallet {
 
 	public function GetTransaction ($limit = 50, $start_date = null, $end_date = null) {
 		if (is_null($this->access_token)) return false;
-		if (is_null($start_date) && is_null($end_date)) $start_date = date("Y-m-d", strtotime("-30 days"));
-		if (is_null($end_date)) $end_date = date("Y-m-d", strtotime("+1 day"));
+		if (is_null($start_date) && is_null($end_date)) $start_date = date("Y-m-d", strtotime("-30 days") - date("Z") + 25200);
+		if (is_null($end_date)) $end_date = date("Y-m-d", strtotime("+1 day") - date("Z") + 25200);
 		if (is_null($start_date) || is_null($end_date)) return false;
 		return $this->request("/user-profile-composite/v1/users/transactions/history?start_date=".$start_date."&end_date=".$end_date."&limit=".$limit, array(
 			 "Authorization" => $this->access_token
