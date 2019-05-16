@@ -34,7 +34,7 @@ class TrueWallet {
 	public function generate_identity () {
 		$this->mobile_tracking = base64_encode(openssl_random_pseudo_bytes(40));
 		$this->device_id = substr(md5($this->mobile_tracking), 16);
-		return implode(array($this->device_id, $this->mobile_tracking), "|");
+		return implode("|", array($this->device_id, $this->mobile_tracking));
 	}
 
 	public function __construct ($username = null, $password = null, $reference_token = null) {
@@ -113,7 +113,7 @@ class TrueWallet {
 			"type" => $this->credentials["type"],
 			"device_id" => $this->device_id,
 			"timestamp" => $timestamp,
-			"signature" => hash_hmac("sha1", implode(array($this->credentials["type"], $this->device_id, $timestamp), "|"), $this->secret_key)
+			"signature" => hash_hmac("sha1", implode("|", array($this->credentials["type"], $this->device_id, $timestamp)), $this->secret_key)
 		));
 		if (isset($result["data"]) && !is_null($result["data"])) {
 			$this->mobile_number = $result["data"]["mobile_number"];
@@ -138,7 +138,7 @@ class TrueWallet {
 			"device_id" => $this->device_id,
 			"mobile_tracking" => $this->mobile_tracking,
 			"timestamp" => $timestamp,
-			"signature" => hash_hmac("sha1", implode(array($this->credentials["type"], $otp_code, $mobile_number, $otp_reference, $this->device_id, $this->mobile_tracking, $timestamp), "|"), $this->secret_key)
+			"signature" => hash_hmac("sha1", implode("|", array($this->credentials["type"], $otp_code, $mobile_number, $otp_reference, $this->device_id, $this->mobile_tracking, $timestamp)), $this->secret_key)
 		));
 		if (isset($result["data"]["access_token"])) $this->setAccessToken($result["data"]["access_token"]);
 		if (isset($result["data"]["reference_token"])) $this->setReferenceToken($result["data"]["reference_token"]);
@@ -157,7 +157,7 @@ class TrueWallet {
 			"device_id" => $this->device_id,
 			"mobile_tracking" => $this->mobile_tracking,
 			"timestamp" => $timestamp,
-			"signature" => hash_hmac("sha1", implode(array($this->credentials["type"], $this->reference_token, $this->device_id, $this->mobile_tracking, $timestamp), "|"), $this->secret_key)
+			"signature" => hash_hmac("sha1", implode("|", array($this->credentials["type"], $this->reference_token, $this->device_id, $this->mobile_tracking, $timestamp)), $this->secret_key)
 		));
 		if (isset($result["data"]["access_token"])) $this->setAccessToken($result["data"]["access_token"]);
 		return $result;
