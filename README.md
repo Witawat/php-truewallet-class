@@ -88,23 +88,27 @@ You can submit Login OTP with this function, $mobile_number and $otp_reference p
 
 You can login without OTP with this function, Login Credentials and Reference Token are required.
 
-### [function GetProfile ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L166-L169)
+### [function Logout ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L166-L169)
+
+You can logout with this function, this function will destroy Access Token session.
+
+### [function GetProfile ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L171-L174)
 
 You can get your Profile information with this function.
 
-### [function GetBalance ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L171-L174)
+### [function GetBalance ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L176-L179)
 
 You can get your current wallet balance with this function.
 
-### [function GetTransaction ($limit = 50, $start_date = null, $end_date = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L176-L184)
+### [function GetTransaction ($limit = 50, $start_date = null, $end_date = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L181-L189)
 
 You can fetch your transaction(s) with this function, $start_date and $end_date parameters are needed to be "Y-m-d" format.
 
-### [function GetTransactionReport ($report_id)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L186-L191)
+### [function GetTransactionReport ($report_id)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L191-L196)
 
 You can fetch your transaction report with this function, $report_id parameter is required.
 
-### [function TopupCashcard ($cashcard)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L193-L196)
+### [function TopupCashcard ($cashcard)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L198-L201)
 
 You can topup your wallet balance with this function, $cashcard parameter is required.
 
