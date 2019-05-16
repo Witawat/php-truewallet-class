@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2018-2019
  * @license   https://creativecommons.org/licenses/by/4.0/ Attribution 4.0 International (CC BY 4.0)
  * @link      https://github.com/likecyber/php-truewallet-api
- * @version   1.1.1
+ * @version   1.1.3
 **/
 
 class TrueWallet {
@@ -55,19 +55,19 @@ class TrueWallet {
 
 	public function setCredentials ($username, $password, $reference_token = null, $type = null) {
 		if (is_null($type)) $type = filter_var($username, FILTER_VALIDATE_EMAIL) ? "email" : "mobile";
-		$this->credentials["username"] = $username;
-		$this->credentials["password"] = $password;
-		$this->credentials["type"] = $type;
-		$this->access_token = null;
-		$this->reference_token =  $reference_token;
+		$this->credentials["username"] = strval($username);
+		$this->credentials["password"] = strval($password);
+		$this->credentials["type"] = strval($type);
+		$this->setAccessToken(null);
+		$this->setReferenceToken($reference_token);
 	}
 
 	public function setAccessToken ($access_token) {
-		$this->access_token = $access_token;
+		$this->access_token = is_null($access_token) ? null : strval($access_token);
 	}
 
 	public function setReferenceToken ($reference_token) {
-		$this->reference_token = $reference_token;
+		$this->reference_token = is_null($reference_token) ? null : strval($reference_token);
 	}
 
 	public function request ($api_path, $headers = array(), $data = null) {
@@ -115,7 +115,7 @@ class TrueWallet {
 			"timestamp" => $timestamp,
 			"signature" => hash_hmac("sha1", implode("|", array($this->credentials["type"], $this->device_id, $timestamp)), $this->secret_key)
 		));
-		if (isset($result["data"]) && !is_null($result["data"])) {
+		if (isset($result["data"]["mobile_number"]) && isset($result["data"]["otp_reference"])) {
 			$this->mobile_number = $result["data"]["mobile_number"];
 			$this->otp_reference = $result["data"]["otp_reference"];
 		}
@@ -132,13 +132,13 @@ class TrueWallet {
 			"password" => sha1($this->credentials["username"].$this->credentials["password"])
 		), array(
 			"type" => $this->credentials["type"],
-			"otp_code" => $otp_code,
-			"mobile_number" => $mobile_number,
-			"otp_reference" => $otp_reference,
+			"otp_code" => strval($otp_code),
+			"mobile_number" => strval($mobile_number),
+			"otp_reference" => strval($otp_reference),
 			"device_id" => $this->device_id,
 			"mobile_tracking" => $this->mobile_tracking,
 			"timestamp" => $timestamp,
-			"signature" => hash_hmac("sha1", implode("|", array($this->credentials["type"], $otp_code, $mobile_number, $otp_reference, $this->device_id, $this->mobile_tracking, $timestamp)), $this->secret_key)
+			"signature" => hash_hmac("sha1", implode("|", array($this->credentials["type"], strval($otp_code), strval($mobile_number), strval($otp_reference), $this->device_id, $this->mobile_tracking, $timestamp)), $this->secret_key)
 		));
 		if (isset($result["data"]["access_token"])) $this->setAccessToken($result["data"]["access_token"]);
 		if (isset($result["data"]["reference_token"])) $this->setReferenceToken($result["data"]["reference_token"]);
@@ -163,6 +163,11 @@ class TrueWallet {
 		return $result;
 	}
 
+	public function Logout () {
+		if (is_null($this->access_token)) return false;
+		return $this->request("/api/v1/signout/".$this->access_token, array(), "");
+	}
+
 	public function GetProfile () {
 		if (is_null($this->access_token)) return false;
 		return $this->request("/api/v1/profile/".$this->access_token);
@@ -178,21 +183,21 @@ class TrueWallet {
 		if (is_null($start_date) && is_null($end_date)) $start_date = date("Y-m-d", strtotime("-30 days") - date("Z") + 25200);
 		if (is_null($end_date)) $end_date = date("Y-m-d", strtotime("+1 day") - date("Z") + 25200);
 		if (is_null($start_date) || is_null($end_date)) return false;
-		return $this->request("/user-profile-composite/v1/users/transactions/history?start_date=".$start_date."&end_date=".$end_date."&limit=".$limit, array(
-			 "Authorization" => $this->access_token
+		return $this->request("/user-profile-composite/v1/users/transactions/history?start_date=".strval($start_date)."&end_date=".strval($end_date)."&limit=".intval($limit), array(
+			"Authorization" => $this->access_token
 		));
 	}
 
 	public function GetTransactionReport ($report_id) {
 		if (is_null($this->access_token)) return false;
-		return $this->request("/user-profile-composite/v1/users/transactions/history/detail/".$report_id, array(
-			 "Authorization" => $this->access_token
+		return $this->request("/user-profile-composite/v1/users/transactions/history/detail/".intval($report_id), array(
+			"Authorization" => $this->access_token
 		));
 	}
 
 	public function TopupCashcard ($cashcard) {
 		if (is_null($this->access_token)) return false;
-		return $this->request("/api/v1/topup/mobile/".time()."/".$this->access_token."/cashcard/".$cashcard, array(), "");
+		return $this->request("/api/v1/topup/mobile/".time()."/".$this->access_token."/cashcard/".strval($cashcard), array(), "");
 	}
 }
 
