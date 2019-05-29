@@ -4,7 +4,7 @@
 * TrueWallet Class
  *
  * @category  Payment Gateway
- * @package   php-truewallet-api
+ * @package   php-truewallet-class
  * @author    Likecyber <cyber2friends@gmail.com>
  * @copyright Copyright (c) 2018-2019
  * @license   https://creativecommons.org/licenses/by/4.0/ Attribution 4.0 International (CC BY 4.0)
