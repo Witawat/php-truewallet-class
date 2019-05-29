@@ -8,7 +8,7 @@
  * @author    Likecyber <cyber2friends@gmail.com>
  * @copyright Copyright (c) 2018-2019
  * @license   https://creativecommons.org/licenses/by/4.0/ Attribution 4.0 International (CC BY 4.0)
- * @link      https://github.com/likecyber/php-truewallet-api
+ * @link      https://github.com/likecyber/php-truewallet-class
  * @version   1.1.3
 **/
 
