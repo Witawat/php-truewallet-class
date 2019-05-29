@@ -42,6 +42,12 @@ Paypal: likecyber.unlimit@gmail.com
 
 PromptPay: 091-314-7533 (Thiranat Mahattanobon)
 
+BTC address: 3ASp8h7zo1exHJ2ZGNbEdu5kahY5XoNerN
+
+ETH Address: 0x7d0068B8ba02F18e79abdFC5e33B94830A6c93fA
+
+BCH Address: bitcoincash:qpa0dkuq3mwdy2ja0w4ujkjs29jrdy8qlugt5hjvef
+
 ## Installation
 
 It is pretty simple to utilize this class, you just need to require it.
