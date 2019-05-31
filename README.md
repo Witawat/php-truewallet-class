@@ -68,55 +68,71 @@ $tw = new TrueWallet($access_token); // Access Token
 ```
 ## Functions
 
-### [function setCredentials ($username, $password, $reference_token = null, $type = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L56-L63)
+### [function setCredentials ($username, $password, $reference_token = null, $type = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L55-L62)
 
 You can set Login Credentials with this function.
 
 Email or Mobile Number can be used as Username. PIN can be used as Password as well.
 
-### [function setAccessToken ($access_token)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L65-L67)
+### [function setAccessToken ($access_token)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L64-L66)
 
 You can set Access Token with this function.
 
-### [function setReferenceToken ($reference_token)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L69-L71)
+### [function setReferenceToken ($reference_token)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L68-L70)
 
 You can set Reference Token with this function.
 
-### [function RequestLoginOTP ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L106-L123)
+### [function RequestLoginOTP ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L109-L122)
 
 You can request for Login OTP with this function, Login Credentials are required.
 
-### [function SubmitLoginOTP ($otp_code, $mobile_number = null, $otp_reference = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L125-L146)
+This function will automatically fill $mobile_number and $otp_reference parameters for SubmitLoginOTP() function.
+
+### [function SubmitLoginOTP ($otp_code, $mobile_number = null, $otp_reference = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L124-L145)
 
 You can submit Login OTP with this function, $mobile_number and $otp_reference parameters are required.
 
-### [function Login ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L148-L164)
+### [function Login ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L147-L163)
 
 You can login without OTP with this function, Login Credentials and Reference Token are required.
 
-### [function Logout ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L166-L169)
+### [function Logout ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L165-L168)
 
 You can logout with this function, this function will destroy Access Token session.
 
-### [function GetProfile ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L171-L174)
+### [function GetProfile ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L170-L173)
 
 You can get your Profile information with this function.
 
-### [function GetBalance ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L176-L179)
+### [function GetBalance ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L175-L178)
 
 You can get your current wallet balance with this function.
 
-### [function GetTransaction ($limit = 50, $start_date = null, $end_date = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L181-L189)
+### [function GetTransaction ($limit = 50, $start_date = null, $end_date = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L180-L188)
 
 You can fetch your transaction(s) with this function, $start_date and $end_date parameters are needed to be "Y-m-d" format.
 
-### [function GetTransactionReport ($report_id)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L191-L196)
+### [function GetTransactionReport ($report_id)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L190-L195)
 
 You can fetch your transaction report with this function, $report_id parameter is required.
 
-### [function TopupCashcard ($cashcard)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L198-L201)
+### [function TopupCashcard ($cashcard)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L197-L200)
 
 You can topup your wallet balance with this function, $cashcard parameter is required.
+
+### [function DraftTransferP2P ($mobile_number, $amount)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L202-L213)
+
+You can draft P2P transfer transaction with this function.
+
+You will need to call ConfirmTransferP2P() function to process transfer.
+
+This function will automatically fill $draft_transaction_id and $reference_key parameters for ConfirmTransferP2P() function.
+
+### [function ConfirmTransferP2P ($personal_message = "", $draft_transaction_id = null, $reference_key = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L215-L229)
+
+You can process P2P transfer with this function.
+
+$draft_transaction_id and $reference_key parameters are required.
 
 ---
 
@@ -140,7 +156,8 @@ These variables can be used if you need them.
 - CURLOPT_SSL_VERIFYPEER can be turn off with $this->curl_options.
 - It is best to combine $this->http_code to check for the status of API.
 - $this->request()  will automatically json_decode if possible.
-- $mobile_number and $otp_reference are not required to be fill if you use RequestLoginOTP() function before.
+- $mobile_number and $otp_reference are not required to be filled if you use RequestLoginOTP() function before.
+- $draft_transaction_id and $reference_key are not required to be filled if you use DraftTransferP2P() function before.
 - GetTransaction() function will fetch last 50 transactions within the last 30 days by default.
 
 ---
