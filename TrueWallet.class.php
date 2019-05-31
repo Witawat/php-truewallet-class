@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2018-2019
  * @license   https://creativecommons.org/licenses/by/4.0/ Attribution 4.0 International (CC BY 4.0)
  * @link      https://github.com/likecyber/php-truewallet-class
- * @version   1.1.3
+ * @version   1.2.0
 **/
 
 class TrueWallet {
@@ -19,8 +19,7 @@ class TrueWallet {
 
 	public $curl_options = null;
 
-	public $mobile_number = null;
-	public $otp_reference = null;
+	public $data = null;
 
 	public $response = null;
 	public $http_code = null;
@@ -71,6 +70,7 @@ class TrueWallet {
 	}
 
 	public function request ($api_path, $headers = array(), $data = null) {
+		$this->data = null;
 		$handle = curl_init($this->mobile_api_gateway.ltrim($api_path, "/"));
 		if (!is_null($data)) {
 			curl_setopt_array($handle, array(
@@ -87,7 +87,10 @@ class TrueWallet {
 		if (is_array($this->curl_options)) curl_setopt_array($handle, $this->curl_options);
 		$this->response = curl_exec($handle);
 		$this->http_code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-		if ($result = json_decode($this->response, true)) return $result;
+		if ($result = json_decode($this->response, true)) {
+			if (isset($result["data"])) $this->data = $result["data"];
+			return $result;
+		}
 		return $this->response;
 	}
 
@@ -115,16 +118,12 @@ class TrueWallet {
 			"timestamp" => $timestamp,
 			"signature" => hash_hmac("sha1", implode("|", array($this->credentials["type"], $this->device_id, $timestamp)), $this->secret_key)
 		));
-		if (isset($result["data"]["mobile_number"]) && isset($result["data"]["otp_reference"])) {
-			$this->mobile_number = $result["data"]["mobile_number"];
-			$this->otp_reference = $result["data"]["otp_reference"];
-		}
 		return $result;
 	}
 
 	public function SubmitLoginOTP ($otp_code, $mobile_number = null, $otp_reference = null) {
-		if (is_null($mobile_number) && !is_null($this->mobile_number)) $mobile_number = $this->mobile_number;
-		if (is_null($otp_reference) && !is_null($this->otp_reference)) $otp_reference = $this->otp_reference;
+		if (is_null($mobile_number) && isset($this->data["mobile_number"])) $mobile_number = $this->data["mobile_number"];
+		if (is_null($otp_reference) && isset($this->data["otp_reference"])) $otp_reference = $this->data["otp_reference"];
 		if (is_null($mobile_number) || is_null($otp_reference)) return false;
 		$timestamp = $this->getTimestamp();
 		$result = $this->request("/api/v1/login/otp/verification/", array(
@@ -199,6 +198,37 @@ class TrueWallet {
 		if (is_null($this->access_token)) return false;
 		return $this->request("/api/v1/topup/mobile/".time()."/".$this->access_token."/cashcard/".strval($cashcard), array(), "");
 	}
+
+	public function DraftTransferP2P ($mobile_number, $amount) {
+		if (is_null($this->access_token)) return false;
+		$timestamp = $this->getTimestamp();
+		return $this->request("/api/v1/transfer/draft-transaction/", array(
+			"Authorization" => $this->access_token
+		), array(
+			"amount" => number_format(str_replace(",", "", strval($amount)), 2, ".", ""),
+			"mobileNumber" => strval($mobile_number),
+			"timestamp" => $timestamp,
+			"signature" => hash_hmac("sha1", implode("|", array(number_format(str_replace(",", "", strval($amount)), 2, ".", ""), strval($mobile_number), $timestamp)), $this->secret_key)
+		));
+	}
+
+	public function ConfirmTransferP2P ($personal_message = "", $draft_transaction_id = null, $reference_key = null) {
+		if (is_null($this->access_token)) return false;
+		if (is_null($draft_transaction_id) && isset($this->data["draftTransactionID"])) $draft_transaction_id = $this->data["draftTransactionID"];
+		if (is_null($reference_key) && isset($this->data["referenceKey"])) $reference_key = $this->data["referenceKey"];
+		if (is_null($draft_transaction_id) || is_null($reference_key)) return false;
+		$timestamp = $this->getTimestamp();
+		return $this->request("/api/v1/transfer/transaction/".$draft_transaction_id, array(
+			"Authorization" => $this->access_token
+		), array(
+			"personalMessage" => strval($personal_message),
+			"referenceKey" => strval($reference_key),
+			"timestamp" => $timestamp,
+			"signature" => hash_hmac("sha1", implode("|", array(strval($personal_message), strval($reference_key), $timestamp)), $this->secret_key)
+		));
+	}
+
+
 }
 
 ?>
