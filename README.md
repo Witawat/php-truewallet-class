@@ -124,8 +124,6 @@ You can topup your wallet balance with this function, $cashcard parameter is req
 
 You can draft P2P transfer transaction with this function.
 
-You will need to call ConfirmTransferP2P() function to process transfer.
-
 This function will automatically fill $draft_transaction_id and $reference_key parameters for ConfirmTransferP2P() function.
 
 ### [function ConfirmTransferP2P ($personal_message = "", $draft_transaction_id = null, $reference_key = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L215-L229)
