@@ -130,9 +130,7 @@ This function will automatically fill $draft_transaction_id and $reference_key p
 
 ### [function ConfirmTransferP2P ($personal_message = "", $draft_transaction_id = null, $reference_key = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L215-L229)
 
-You can process P2P transfer with this function.
-
-$draft_transaction_id and $reference_key parameters are required.
+You can process P2P transfer with this function, $draft_transaction_id and $reference_key parameters are required.
 
 ---
 
