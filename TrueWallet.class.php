@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2018-2019
  * @license   https://creativecommons.org/licenses/by/4.0/ Attribution 4.0 International (CC BY 4.0)
  * @link      https://github.com/likecyber/php-truewallet-class
- * @version   1.2.0
+ * @version   1.2.1
 **/
 
 class TrueWallet {
@@ -206,9 +206,9 @@ class TrueWallet {
 			"Authorization" => $this->access_token
 		), array(
 			"amount" => number_format(str_replace(",", "", strval($amount)), 2, ".", ""),
-			"mobileNumber" => strval($mobile_number),
+			"mobileNumber" => str_replace(array("-", " "), "", strval($mobile_number)),
 			"timestamp" => $timestamp,
-			"signature" => hash_hmac("sha1", implode("|", array(number_format(str_replace(",", "", strval($amount)), 2, ".", ""), strval($mobile_number), $timestamp)), $this->secret_key)
+			"signature" => hash_hmac("sha1", implode("|", array(number_format(str_replace(",", "", strval($amount)), 2, ".", ""), str_replace(array("-", " "), "", strval($mobile_number)), $timestamp)), $this->secret_key)
 		));
 	}
 
@@ -227,8 +227,6 @@ class TrueWallet {
 			"signature" => hash_hmac("sha1", implode("|", array(strval($personal_message), strval($reference_key), $timestamp)), $this->secret_key)
 		));
 	}
-
-
 }
 
 ?>
