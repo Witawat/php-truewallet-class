@@ -29,6 +29,9 @@ foreach ($transactions["data"]["activities"] as $report) {
 }
 ```
 
+**Warning: If you upgrade from version 1.x.x, please recheck on these functions as new endpoints may break your code!*
+
+GetProfile(), GetBalance(), DraftTransferP2P(), ConfirmTransferP2P()
 
 ---
 
@@ -82,53 +85,85 @@ You can set Access Token with this function.
 
 You can set Reference Token with this function.
 
-### [function RequestLoginOTP ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L109-L122)
+### [function RequestLoginOTP ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L108-L121)
 
-You can request for Login OTP with this function, Login Credentials are required.
+You can request for Login OTP with this function. Login Credentials are required.
 
 This function will automatically fill $mobile_number and $otp_reference parameters for SubmitLoginOTP() function.
 
-### [function SubmitLoginOTP ($otp_code, $mobile_number = null, $otp_reference = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L124-L145)
+### [function SubmitLoginOTP ($otp_code, $mobile_number = null, $otp_reference = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L123-L144)
 
-You can submit Login OTP with this function, $mobile_number and $otp_reference parameters are required.
+You can submit Login OTP with this function. $mobile_number and $otp_reference parameters are required.
 
-### [function Login ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L147-L163)
+### [function Login ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L146-L162)
 
-You can login without OTP with this function, Login Credentials and Reference Token are required.
+You can login without OTP with this function. Login Credentials and Reference Token are required.
 
-### [function Logout ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L165-L168)
+### [function Logout ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L164-L167)
 
-You can logout with this function, this function will destroy Access Token session.
+You can logout with this function. this function will destroy Access Token session.
 
-### [function GetProfile ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L170-L173)
+### [function GetProfile ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L169-L174)
 
 You can get your Profile information with this function.
 
-### [function GetBalance ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L175-L178)
+### [function GetBalance ()](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L176-L181)
 
 You can get your current wallet balance with this function.
 
-### [function GetTransaction ($limit = 50, $start_date = null, $end_date = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L180-L188)
+### [function GetTransaction ($limit = 50, $start_date = null, $end_date = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L183-L195)
 
-You can fetch your transaction(s) with this function, $start_date and $end_date parameters are needed to be "Y-m-d" format.
+You can fetch your transaction(s) with this function. $start_date and $end_date parameters are needed to be "Y-m-d" format.
 
-### [function GetTransactionReport ($report_id)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L190-L195)
+### [function GetTransactionReport ($report_id)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L197-L202)
 
-You can fetch your transaction report with this function, $report_id parameter is required.
+You can fetch your transaction report with this function. $report_id parameter is required.
 
-### [function TopupCashcard ($cashcard)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L197-L200)
+### [function TopupCashcard ($cashcard)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L204-L207)
 
-You can topup your wallet balance with this function, $cashcard parameter is required.
+You can topup your wallet balance with this function. $cashcard parameter is required.
 
-### [function DraftTransferP2P ($mobile_number, $amount)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L202-L213)
+### [function DraftTransferP2P ($mobile_number, $amount)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L209-L220)
 
 You can draft P2P transfer transaction with this function.
 
 This function will automatically fill $draft_transaction_id and $reference_key parameters for ConfirmTransferP2P() function.
 
-### [function ConfirmTransferP2P ($personal_message = "", $draft_transaction_id = null, $reference_key = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L215-L229)
+### [function ConfirmTransferP2P ($personal_message = "", $wait_processing = true, $draft_transaction_id = null, $reference_key = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L222-L266)
 
-You can process P2P transfer with this function, $draft_transaction_id and $reference_key parameters are required.
+You can process P2P transfer with this function. $draft_transaction_id and $reference_key parameters are required.
+
+$draft_transaction_id and $reference_key can be set to NULL if you did perform DraftTransferP2P() function before.
+
+If you set $wait_processing to TRUE, it will check for transaction status to be completed before continue.
+
+### [function GetDetailTransferP2P ($transaction_id = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L268-L276)
+
+You can get your P2P transfer details with this function. $transaction_id is required.
+
+$transaction_id can be set to NULL if you did perform GetDetailTransferP2P() function before.
+
+### [function DraftBuyCashcard ($amount, $mobile_number)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L278-L287)
+
+You can draft Buy Cashcard with this function. $amount and $mobile_number are required.
+
+Cashcard E-Pin will be sent as SMS to input $mobile_number.
+
+This function will automatically fill $draft_transaction_id, $mobile_number and $otp_reference parameters for ConfirmBuyCashcard() function.
+
+### [function ConfirmBuyCashcard ($otp_code, $wait_processing = true, $draft_transaction_id = null, $mobile_number = null, $otp_reference = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L289-L324)
+
+You can process Buy Cashcard with this function. $draft_transaction_id, $mobile_number and $otp_reference parameters are required.
+
+$draft_transaction_id, $mobile_number and $otp_reference can be set to NULL if you did perform DraftBuyCashcard() function before.
+
+If you set $wait_processing to TRUE, it will check for transaction status to be completed before continue.
+
+### [function GetDetailBuyCashcard ($transaction_id = null)](https://github.com/likecyber/php-truewallet-class/blob/master/TrueWallet.class.php#L326-L332)
+
+You can get your Buy Cashcard details with this function. $transaction_id is required.
+
+$transaction_id can be set to NULL if you did perform ConfirmBuyCashcard() function before.
 
 ---
 
@@ -152,9 +187,8 @@ These variables can be used if you need them.
 - CURLOPT_SSL_VERIFYPEER can be turn off with $this->curl_options.
 - It is best to combine $this->http_code to check for the status of API.
 - $this->request()  will automatically json_decode if possible.
-- $mobile_number and $otp_reference are not required to be filled if you use RequestLoginOTP() function before.
-- $draft_transaction_id and $reference_key are not required to be filled if you use DraftTransferP2P() function before.
 - GetTransaction() function will fetch last 50 transactions within the last 30 days by default.
+- If you set $wait_processing to TRUE, it will check for transaction status to be completed 10 times with 1 second delay.
 
 ---
 
