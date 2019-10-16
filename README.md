@@ -29,7 +29,7 @@ foreach ($transactions["data"]["activities"] as $report) {
 }
 ```
 
-**Warning: If you upgrade from version 1.x.x, please recheck on these functions as new endpoints may break your code!*
+*Warning: If you upgrade from version 1.x.x, please recheck on these functions as new endpoints may break your code!*
 
 GetProfile(), GetBalance(), DraftTransferP2P(), ConfirmTransferP2P()
 
